@@ -1,4 +1,4 @@
-import { ChevronDown, Menu, Moon, Sun } from 'lucide-react'
+import { ChevronDown, Menu, Moon, RefreshCw, Sun } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -28,23 +28,25 @@ export function PageHeader({
   showSidebarToggle = false,
   theme = 'light',
   onToggleTheme,
-  className
+  className,
 }: PageHeaderProps) {
   return (
-    <header className={cn(
-      'flex items-center justify-between px-4 h-14 border-b border-border bg-card sticky top-0 z-50',
-      className
-    )}>
-      <div className="flex items-center gap-3">
+    <header
+      className={cn(
+        'flex items-center justify-between px-4 h-12 border-b border-border bg-muted/50 sticky top-0 z-50',
+        className,
+      )}
+    >
+      <div className="flex items-center gap-2">
         {/* User Avatar & Menu */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="gap-2 h-8 px-2">
-              <div className="h-7 w-7 rounded-full bg-info flex items-center justify-center text-info-foreground text-sm font-medium">
+            <Button variant="ghost" className="gap-1.5 h-8 px-2">
+              <div className="h-6 w-6 rounded-full bg-info flex items-center justify-center text-info-foreground text-xs font-semibold">
                 {userName.charAt(0).toUpperCase()}
               </div>
-              <span className="text-sm font-medium hidden sm:inline">{userName}</span>
-              <ChevronDown className="h-3.5 w-3.5" />
+              <span className="text-sm hidden sm:inline">{userName}</span>
+              <ChevronDown className="h-3 w-3" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
@@ -60,7 +62,7 @@ export function PageHeader({
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="gap-1 h-8 text-sm px-2">
               {organization}
-              <ChevronDown className="h-3.5 w-3.5" />
+              <ChevronDown className="h-3 w-3" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
@@ -70,10 +72,10 @@ export function PageHeader({
         </DropdownMenu>
       </div>
 
-      {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-sm">
+      {/* Breadcrumb - centered */}
+      <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-2 text-sm">
         <span className="text-warning flex items-center gap-1.5">
-          <span className="text-base">📋</span>
+          <span className="text-sm">📋</span>
           <span className="hidden sm:inline">Purchase Orders</span>
         </span>
         <span className="text-muted-foreground">/</span>
@@ -82,6 +84,9 @@ export function PageHeader({
 
       {/* Actions */}
       <div className="flex items-center gap-1">
+        <Button variant="ghost" size="icon" className="h-8 w-8">
+          <RefreshCw className="h-4 w-4" />
+        </Button>
         <Button
           variant="ghost"
           size="icon"

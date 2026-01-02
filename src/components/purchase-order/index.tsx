@@ -1,9 +1,9 @@
 import * as React from 'react'
-import { Plus, X } from 'lucide-react'
+import { ChevronDown, History, Plus, Printer, RefreshCw } from 'lucide-react'
 
 import { PageHeader } from './page-header'
 import { DocumentHeader } from './document-header'
-import { FormSection, InfoRow } from './form-section'
+import { FormSection } from './form-section'
 import { TimelineSidebar } from './timeline-sidebar'
 import { PurchaseItemsTable } from './purchase-items-table'
 import { AttachmentsSection } from './attachments-section'
@@ -11,14 +11,21 @@ import { ExceptionNotes } from './exception-notes'
 import { AdditionalNotes } from './additional-notes'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 
 // Sample data
 const sampleApprovers = [
-  { name: 'Noorohmah', role: 'Creator', variant: 'info' as const },
-  { name: 'Ninda Ratnasari', role: 'Approved 02 Jan 2026', variant: 'warning' as const },
-  { name: 'Denny Zhang', role: 'Supply Chain Management', variant: 'warning' as const },
+  { name: 'Noorohmah', role: 'Creator', variant: 'creator' as const },
+  {
+    name: 'Ninda Ratnasari',
+    role: 'Approved 02 Jan 2026',
+    variant: 'approved' as const,
+  },
+  {
+    name: 'Denny Zhang',
+    role: 'Supply Chain Management',
+    variant: 'pending' as const,
+  },
   { name: 'Fred Zhang', role: 'BOD', variant: 'default' as const },
 ]
 
@@ -110,10 +117,30 @@ const sampleValueSummary = {
 }
 
 const sampleAttachments = [
-  { id: '1', name: 'PR01-2512-0386(Lmr-dan-ba-permintaan-hru-ep1rb-25-des-2025-010-mr-email7-deck-sir2025.pdf' },
-  { id: '2', name: 'PR01-2512-0386 Penawaran harga BCM - Q0544 - TB Megastar 67.pdf' },
-  { id: '3', name: 'PR01-2512-0386 Penawaran harga IGS - Q 202 - TB Megastar 67.pdf' },
-  { id: '4', name: 'PR01-2512-0386 Penawaran harga KBT - 122 - TB Megastar 67.pdf' },
+  {
+    id: '1',
+    name: 'PR01-2512-0386(Lmr-dan-ba-permintaan-hru-ep1rb-25-des-2025-010-mr-email7-deck-sir2025.pdf',
+  },
+  {
+    id: '2',
+    name: 'PR01-2512-0386 Penawaran harga BCM - Q0544 - TB Megastar 67.pdf',
+  },
+  {
+    id: '3',
+    name: 'PR01-2512-0386 Penawaran harga IGS - Q 202 - TB Megastar 67.pdf',
+  },
+  {
+    id: '4',
+    name: 'PR01-2512-0386 Penawaran harga KBT - 122 - TB Megastar 67.pdf',
+  },
+  {
+    id: '4',
+    name: 'PR01-2512-0386 Penawaran harga KBT - 122 - TB Megastar 67.pdf',
+  },
+]
+
+const sampleExceptionNotes = [
+  { id: '1', title: 'Add Exception Note', actions: '--', attachment: '--' },
 ]
 
 export function PurchaseOrderPage() {
@@ -127,7 +154,7 @@ export function PurchaseOrderPage() {
   }
 
   return (
-    <div className="min-h-screen bg-muted/30">
+    <div className="min-h-screen bg-muted/40">
       <PageHeader
         userName="Muhammad Cahya"
         organization="MBSS"
@@ -141,156 +168,360 @@ export function PurchaseOrderPage() {
       <div className="flex">
         {/* Main Content */}
         <main className="flex-1 p-4 lg:p-5 space-y-3 overflow-auto max-h-[calc(100vh-56px)]">
-          {/* Action Bar */}
-          <div className="flex items-center gap-2 text-sm">
-            <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
-              View Timeline
-            </Button>
-            <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
-              Print
-            </Button>
-            <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
-              Quick Update
-            </Button>
-          </div>
-
-          {/* Document Header */}
-          <FormSection title="Document Header" defaultOpen>
-            <DocumentHeader approvers={sampleApprovers} />
-
-            {/* Info Grid - Row format like reference */}
-            <div className="space-y-1 mt-4">
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-x-4 gap-y-2">
-                <InfoRow label="COMPANY" value="MBSS" />
-                <InfoRow label="PO NUMBER" value="PO01-2601-0002" />
-                <InfoRow label="EXPENSE GROUP" value="Operations" />
-                <InfoRow label="SERVICE AREA" value={<span className="text-info underline cursor-pointer">BANJARMASIN</span>} />
-              </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-x-4 gap-y-2">
-                <InfoRow label="DOC STATUS" value="Published" />
-                <InfoRow label="CREATED BY" value="Noorohmah" />
-                <InfoRow label="EXPENSE TYPE" value="Vessels Supplies - Coal" />
-              </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-x-4 gap-y-2">
-                <InfoRow label="CURRENCY" value="IDR" />
-                <InfoRow label="PUBLISHED" value="02 Jan 2026" />
-                <InfoRow label="REQUIRED DATE" value="02 Jan 2026" />
-              </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-x-4 gap-y-2">
-                <InfoRow label="TRACKING CODE" value={<span className="text-info underline cursor-pointer">2910270002</span>} />
-                <InfoRow label="TERMS (DAYS)" value="30" />
-                <InfoRow label="DELIVERY TO" value={<span className="text-info underline cursor-pointer">ENTEBE MEGASTAR 67</span>} />
-              </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-x-4 gap-y-2">
-                <InfoRow label="TAX CODE" value={<span className="text-info underline cursor-pointer">V1 0%</span>} />
-                <InfoRow label="PROCUREMENT TYPE" value="Goods" />
-              </div>
-            </div>
-          </FormSection>
-
-          {/* Purchase Requests */}
-          <FormSection title="Purchase Requests" defaultOpen>
+          <div className="flex flex-col gap-5 px-6 py-4 max-w-[1400px] mx-auto">
+            {/* Toolbar */}
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className="bg-info/10 text-info border-info/40 px-2 py-0.5">
-                PR01-2512-0386
-                <button className="ml-1.5 hover:text-info/70"><X className="h-3 w-3" /></button>
-              </Badge>
-              <Button variant="ghost" size="sm" className="text-info gap-1 h-7 text-xs">
-                <Plus className="h-3 w-3" />
-                Add PR
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8 gap-1.5 rounded-full text-xs font-medium border-border/60 hover:bg-muted/50"
+              >
+                <History className="h-3.5 w-3.5" />
+                View Timeline
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8 gap-1.5 rounded-full text-xs font-medium border-border/60 hover:bg-muted/50"
+              >
+                <Printer className="h-3.5 w-3.5" />
+                Print
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8 gap-1.5 rounded-full text-xs font-medium border-border/60 hover:bg-muted/50"
+              >
+                <RefreshCw className="h-3.5 w-3.5" />
+                Quick Update
               </Button>
             </div>
-          </FormSection>
 
-          {/* Vendor Bidding */}
-          <FormSection title="Vendor Bidding" defaultOpen>
-            <div className="flex items-center gap-2">
-              <Badge variant="outline" className="bg-info/10 text-info border-info/40 px-2 py-0.5">
-                BD01-2512-0435
-                <button className="ml-1.5 hover:text-info/70"><X className="h-3 w-3" /></button>
-              </Badge>
-              <Button variant="ghost" size="sm" className="text-info gap-1 h-7 text-xs">
-                <Plus className="h-3 w-3" />
-                Add Vendor Bidding
-              </Button>
-            </div>
-          </FormSection>
+            {/* Document Header */}
+            <FormSection
+              title="Document Header"
+              defaultOpen
+              className="dark:bg-slate-900/50"
+            >
+              <DocumentHeader approvers={sampleApprovers} className="mb-8" />
+              {/* ... (existing fields code) ... */}
+              <div className="divide-y divide-border/40 text-sm">
+                {/* ... (existing grid code) ... */}
+                <div className="grid grid-cols-8 gap-x-2 py-2.5">
+                  <span className="text-muted-foreground text-[10px] uppercase font-bold tracking-wider">
+                    COMPANY
+                  </span>
+                  <span className="text-foreground tracking-tight font-medium">
+                    MBSS
+                  </span>
+                  <span className="text-muted-foreground text-[10px] uppercase font-bold tracking-wider">
+                    PO NUMBER
+                  </span>
+                  <span className="text-foreground tracking-tight italic font-medium">
+                    PO01-2601-0002
+                  </span>
+                  <span className="text-muted-foreground text-[10px] uppercase font-bold tracking-wider">
+                    EXPENSE GROUP
+                  </span>
+                  <span className="text-foreground tracking-tight font-medium">
+                    Operations
+                  </span>
+                  <span className="text-muted-foreground text-[10px] uppercase font-bold tracking-wider">
+                    SERVICE AREA
+                  </span>
+                  <span className="text-blue-600 underline cursor-pointer decoration-1 underline-offset-2 tracking-tight font-medium dark:text-blue-400">
+                    BANJARMASIN
+                  </span>
+                </div>
+                <div className="grid grid-cols-8 gap-x-2 py-2.5">
+                  <span className="text-muted-foreground text-[10px] uppercase font-bold tracking-wider">
+                    DOC STATUS
+                  </span>
+                  <span className="text-foreground tracking-tight font-medium">
+                    Published
+                  </span>
+                  <span className="text-muted-foreground text-[10px] uppercase font-bold tracking-wider">
+                    CREATED BY
+                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <div className="h-4 w-4 rounded-full bg-blue-600 flex items-center justify-center text-[8px] text-white font-bold">
+                      N
+                    </div>
+                    <span className="text-foreground tracking-tight font-medium">
+                      Noorohmah
+                    </span>
+                  </div>
+                  <span className="text-muted-foreground text-[10px] uppercase font-bold tracking-wider">
+                    EXPENSE TYPE
+                  </span>
+                  <span className="text-foreground tracking-tight font-medium">
+                    Vessels Supplies - Coal
+                  </span>
+                  <span className="text-muted-foreground text-[10px] uppercase font-bold tracking-wider"></span>
+                  <span className="text-foreground tracking-tight font-medium"></span>
+                </div>
+                <div className="grid grid-cols-8 gap-x-2 py-2.5">
+                  <span className="text-muted-foreground text-[10px] uppercase font-bold tracking-wider">
+                    CURRENCY
+                  </span>
+                  <span className="text-foreground tracking-tight font-medium">
+                    IDR
+                  </span>
+                  <span className="text-muted-foreground text-[10px] uppercase font-bold tracking-wider">
+                    PUBLISHED
+                  </span>
+                  <span className="text-foreground tracking-tight font-medium">
+                    02 Jan 2026
+                  </span>
+                  <span className="text-muted-foreground text-[10px] uppercase font-bold tracking-wider">
+                    REQUIRED DATE
+                  </span>
+                  <span className="text-blue-600 underline cursor-pointer decoration-1 underline-offset-2 tracking-tight font-medium dark:text-blue-400">
+                    02 Jan 2026
+                  </span>
+                  <span className="text-muted-foreground text-[10px] uppercase font-bold tracking-wider">
+                    DELIVERY TO
+                  </span>
+                  <span className="text-blue-600 underline cursor-pointer decoration-1 underline-offset-2 tracking-tight font-medium dark:text-blue-400">
+                    ENTEBE MEGASTAR 67
+                  </span>
+                </div>
+                <div className="grid grid-cols-8 gap-x-2 py-2.5">
+                  <span className="text-muted-foreground text-[10px] uppercase font-bold tracking-wider">
+                    TRACKING CODE
+                  </span>
+                  <span className="text-blue-600 underline cursor-pointer decoration-1 underline-offset-2 tracking-tight font-medium dark:text-blue-400">
+                    2910270002
+                  </span>
+                  <span className="text-muted-foreground text-[10px] uppercase font-bold tracking-wider">
+                    TERMS (DAYS)
+                  </span>
+                  <span className="text-foreground tracking-tight font-medium">
+                    30
+                  </span>
+                  <span className="text-muted-foreground text-[10px] uppercase font-bold tracking-wider"></span>
+                  <span className="text-foreground tracking-tight font-medium"></span>
+                  <span className="text-muted-foreground text-[10px] uppercase font-bold tracking-wider"></span>
+                  <span className="text-foreground tracking-tight font-medium"></span>
+                </div>
+                <div className="grid grid-cols-8 gap-x-2 py-2.5 border-b border-border/40">
+                  <span className="text-muted-foreground text-[10px] uppercase font-bold tracking-wider">
+                    TAX CODE
+                  </span>
+                  <span className="text-blue-600 underline cursor-pointer decoration-1 underline-offset-2 tracking-tight font-medium dark:text-blue-400">
+                    V1 0%
+                  </span>
+                  <span className="text-muted-foreground text-[10px] uppercase font-bold tracking-wider">
+                    PROCUREMENT TYPE
+                  </span>
+                  <span className="text-foreground tracking-tight font-medium">
+                    Goods
+                  </span>
+                  <span className="text-muted-foreground text-[10px] uppercase font-bold tracking-wider"></span>
+                  <span className="text-foreground tracking-tight font-medium"></span>
+                  <span className="text-muted-foreground text-[10px] uppercase font-bold tracking-wider"></span>
+                  <span className="text-foreground tracking-tight font-medium"></span>
+                </div>
+              </div>
+            </FormSection>
 
-          {/* Vendor Info */}
-          <FormSection title="Vendor Info" defaultOpen>
-            <div className="space-y-2">
-              <button className="text-info text-sm flex items-center gap-1 hover:underline">
-                <Plus className="h-3 w-3" />
-                Select a Vendor Info
-              </button>
-              <div>
-                <a href="#" className="text-info underline text-sm font-medium">
+            {/* Purchase Requests */}
+            <FormSection
+              title="Purchase Requests"
+              defaultOpen
+              className="dark:bg-slate-900/50"
+            >
+              <div className="flex items-center gap-3">
+                <button className="flex items-center gap-1.5 px-3 py-1 bg-blue-50 border border-blue-200 text-blue-700 text-xs font-medium rounded-sm shadow-sm hover:bg-blue-100 dark:bg-blue-900/30 dark:border-blue-800 dark:text-blue-300">
+                  PR01-2512-0386
+                  <ChevronDown className="h-3 w-3 opacity-50" />
+                </button>
+                <button className="flex items-center gap-1.5 px-3 py-1 border border-dashed border-gray-300 text-gray-400 text-xs font-medium rounded-full hover:border-blue-400 hover:text-blue-500 transition-colors">
+                  <Plus className="h-3 w-3" />
+                  Add PR
+                </button>
+              </div>
+            </FormSection>
+
+            {/* Vendor Bidding */}
+            <FormSection
+              title="Vendor Bidding"
+              defaultOpen
+              className="dark:bg-slate-900/50"
+            >
+              <div className="flex items-center gap-3">
+                <button className="flex items-center gap-1.5 px-3 py-1 bg-blue-50 border border-blue-200 text-blue-700 text-xs font-medium rounded-sm shadow-sm hover:bg-blue-100 dark:bg-blue-900/30 dark:border-blue-800 dark:text-blue-300">
+                  BD01-2512-0435
+                  <ChevronDown className="h-3 w-3 opacity-50" />
+                </button>
+                <button className="flex items-center gap-1.5 px-3 py-1 border border-dashed border-gray-300 text-gray-400 text-xs font-medium rounded-full hover:border-blue-400 hover:text-blue-500 transition-colors">
+                  <Plus className="h-3 w-3" />
+                  Add Vendor Bidding
+                </button>
+              </div>
+            </FormSection>
+
+            {/* Vendor Info */}
+            <FormSection
+              title="Vendor Info"
+              defaultOpen
+              className="dark:bg-slate-900/50"
+            >
+              <div className="space-y-1">
+                <a
+                  href="#"
+                  className="block text-blue-600 hover:underline text-sm font-medium dark:text-blue-400"
+                >
                   V170017 - 0 - KARYA BERSAMA TEKNIK - BANJARMASIN
                 </a>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Jl Ray 11 Puruk Tengah Rt 008 / Rw 004, Sei Puruk Tengah, Mandastana Barito Kuala, 70561
-                </p>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  <span className="font-medium">NPWP:</span> 702438003731000
-                </p>
+                <div className="text-xs text-muted-foreground leading-relaxed">
+                  Jl Ray 11 Puruk Tengah Rt 008 / Rw 004, Sei Puruk Tengah,
+                  Mandastana Barito Kuala, 70561
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  NPWP: 702438003731000
+                </div>
+                <button className="flex items-center gap-1 text-blue-500 text-xs hover:underline mt-2 font-medium cursor-pointer dark:text-blue-400">
+                  <Plus className="h-3 w-3" />
+                  Select a Vendor Info
+                </button>
               </div>
-            </div>
-          </FormSection>
+            </FormSection>
 
-          {/* Bank Info */}
-          <FormSection title="Bank Info" defaultOpen>
-            <div className="space-y-2">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <InfoRow label="SOURCE BANK" value="Default" />
+            {/* Bank Info */}
+            <FormSection
+              title="Bank Info"
+              defaultOpen
+              className="dark:bg-slate-900/50"
+            >
+              <div className="grid grid-cols-[100px_1fr] gap-4 items-center mb-1">
+                <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">
+                  SOURCE BANK
+                </span>
+                <span className="text-sm font-medium">Default</span>
               </div>
-              <InfoRow label="BANK INFO" value={<a href="#" className="text-info underline">Bank Mandiri - IDR - KARYA BERSAMA TEKNIK - 0210019018214 - BANK02A</a>} />
-              <InfoRow label="INTERMEDIARY INFO" value="--" />
-            </div>
-          </FormSection>
+              <div className="grid grid-cols-[100px_1fr] gap-4 items-center mb-1">
+                <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">
+                  BANK INFO
+                </span>
+                <span className="text-sm font-medium">
+                  <a
+                    href="#"
+                    className="text-blue-600 underline dark:text-blue-400"
+                  >
+                    Bank Mandiri - IDR - KARYA BERSAMA TEKNIK - 0310010916214 -
+                    BMR1IDJA
+                  </a>
+                </span>
+              </div>
+              <div className="grid grid-cols-[100px_1fr] gap-4 items-center">
+                <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">
+                  INTERMEDIARY INFO
+                </span>
+                <span className="text-sm font-medium">--</span>
+              </div>
+            </FormSection>
 
-          {/* Purchase Items */}
-          <FormSection title="Purchase Items" defaultOpen>
+            {/* Purchase Items */}
+            {/* Purchase Items */}
+            {/* Purchase Items */}
             <Tabs defaultValue="items" className="w-full">
-              <TabsList className="h-8">
-                <TabsTrigger value="items" className="text-xs h-7">Purchase Items</TabsTrigger>
-                <TabsTrigger value="account" className="text-xs h-7">Account Assignment</TabsTrigger>
-              </TabsList>
-              <TabsContent value="items" className="mt-3">
-                <PurchaseItemsTable items={samplePurchaseItems} summary={sampleValueSummary} />
-              </TabsContent>
-              <TabsContent value="account" className="mt-3">
-                <p className="text-muted-foreground text-sm">Account assignment details...</p>
-              </TabsContent>
+              <FormSection
+                customTitle={
+                  <div className="flex items-center gap-6">
+                    <span>Purchase Items</span>
+                    <TabsList className="hidden h-auto bg-transparent p-0 gap-6 border-l border-white/20 pl-6 ml-2">
+                      <TabsTrigger
+                        value="items"
+                        className="h-auto p-0 font-medium text-xs text-blue-200 data-[state=active]:text-white bg-transparent shadow-none hover:text-white transition-colors"
+                      >
+                        PURCHASE ITEMS
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="account"
+                        className="h-auto p-0 font-medium text-xs text-blue-200 data-[state=active]:text-white bg-transparent shadow-none hover:text-white transition-colors"
+                      >
+                        ACCOUNT ASSIGNMENT
+                      </TabsTrigger>
+                    </TabsList>
+                  </div>
+                }
+                defaultOpen
+                className="dark:bg-slate-900/50"
+                contentClassName="p-0 overflow-hidden"
+              >
+                <div className="p-4">
+                  <TabsContent value="items" className="mt-0">
+                    <PurchaseItemsTable
+                      items={samplePurchaseItems}
+                      summary={sampleValueSummary}
+                      onAddItem={() => { }}
+                    />
+                  </TabsContent>
+                  <TabsContent value="account" className="mt-0">
+                    <div className="p-8 text-center text-sm text-muted-foreground">
+                      Account Assignment content
+                    </div>
+                  </TabsContent>
+                </div>
+              </FormSection>
             </Tabs>
-          </FormSection>
 
-          {/* Attachments */}
-          <FormSection title="Attachments" defaultOpen>
-            <AttachmentsSection attachments={sampleAttachments} />
-          </FormSection>
+            {/* Attachments */}
+            <FormSection
+              title="Attachments"
+              defaultOpen
+              className="dark:bg-slate-900/50"
+            >
+              <AttachmentsSection
+                attachments={sampleAttachments}
+                onAdd={() => { }}
+                onRemove={() => { }}
+              />
+            </FormSection>
 
-          {/* Exception Note */}
-          <FormSection title="Exception Note" defaultOpen>
-            <ExceptionNotes notes={[{ id: '1', title: 'Add Exception Note', actions: '--', attachment: '--' }]} />
-          </FormSection>
-
-          {/* Additional Notes */}
-          <FormSection title="Additional Notes" defaultOpen>
-            <AdditionalNotes value={`PT KARYA BERSAMA TEKNIK
+            {/* Exception Notes & Additional Notes */}
+            <div className="grid grid-cols-1 gap-6">
+              <FormSection
+                title="Exception Note"
+                defaultOpen
+                className="dark:bg-slate-900/50"
+              >
+                <ExceptionNotes
+                  notes={sampleExceptionNotes}
+                  onAddNote={() => { }}
+                />
+              </FormSection>
+              <FormSection
+                title="Additional Notes"
+                defaultOpen
+                className="dark:bg-slate-900/50"
+              >
+                <AdditionalNotes
+                  value={`PT KARYA BERSAMA TEKNIK
 01/MR/E1567/DECK/XII/2025
 TB. ENTEBE MEGASTAR 67
 HRU EF1B8
-D1 BANJARMASIN (PASSING TRISAKTI)`} />
-          </FormSection>
+D1 BANJARMASIN (PASSING TRISAKTI)`}
+                />
+              </FormSection>
+            </div>
 
-          {/* Action Buttons */}
-          <div className="flex items-center gap-3 pt-4 pb-8">
-            <Button size="sm" className="bg-info hover:bg-info/90 text-info-foreground">
-              Submit
-            </Button>
-            <Button size="sm" variant="destructive">
-              Cancel
-            </Button>
+            {/* Action Buttons */}
+            <div className="flex items-center gap-3 pt-4 pb-8 px-1">
+              <Button
+                size="sm"
+                className="bg-slate-800 hover:bg-slate-900 text-white px-8 h-9 font-medium shadow-sm border border-transparent dark:border-slate-700"
+              >
+                Submit
+              </Button>
+              <Button
+                size="sm"
+                className="bg-red-500 hover:bg-red-600 text-white px-8 h-9 font-medium shadow-sm border border-transparent dark:border-red-900"
+              >
+                Cancel
+              </Button>
+            </div>
           </div>
         </main>
 
@@ -303,7 +534,7 @@ D1 BANJARMASIN (PASSING TRISAKTI)`} />
           />
         </aside>
 
-        {/* Timeline Sidebar - Mobile/Tablet Sheet */}
+        {/* Timeline Sidebar - Mobile Sheet */}
         <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
           <SheetContent side="right" className="w-80 p-0">
             <TimelineSidebar

@@ -11,19 +11,21 @@ export function AdditionalNotes({
   value = '',
   onChange,
   readOnly = true,
-  className
+  className,
 }: AdditionalNotesProps) {
   return (
     <div className={cn('', className)}>
       {readOnly ? (
-        <pre className="text-xs font-mono text-foreground whitespace-pre-wrap leading-relaxed">
-          {value || 'No additional notes'}
-        </pre>
+        <div className="bg-muted/10 border border-border/60 rounded-sm p-4 min-h-[100px]">
+          <pre className="text-xs font-mono text-foreground whitespace-pre-wrap leading-relaxed">
+            {value || 'No additional notes'}
+          </pre>
+        </div>
       ) : (
         <textarea
           value={value}
           onChange={(e) => onChange?.(e.target.value)}
-          className="w-full min-h-[80px] p-2 text-xs font-mono bg-background border border-input rounded-md resize-y focus:outline-none focus:ring-2 focus:ring-ring"
+          className="w-full min-h-[100px] p-4 text-xs font-mono bg-background border border-input rounded-sm resize-y focus:outline-none focus:ring-1 focus:ring-blue-500"
           placeholder="Add additional notes..."
         />
       )}
