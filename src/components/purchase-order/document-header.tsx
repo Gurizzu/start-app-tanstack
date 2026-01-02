@@ -14,25 +14,23 @@ export function ApprovalBadge({
   role,
   date,
   variant = 'default',
-  className,
+  className
 }: ApprovalBadgeProps) {
   const variants = {
     default: 'bg-muted text-muted-foreground border-border',
-    warning: 'bg-warning-muted text-warning-muted-foreground border-warning/30',
-    info: 'bg-info-muted text-info-muted-foreground border-info/30',
+    warning: 'bg-warning-muted text-foreground border-warning',
+    info: 'bg-info-muted text-foreground border-info'
   }
 
   return (
-    <div
-      className={cn(
-        'flex flex-col rounded-md border px-3 py-2 text-sm',
-        variants[variant],
-        className,
-      )}
-    >
-      <span className="font-semibold">{name}</span>
-      <span className="text-xs opacity-80">{role}</span>
-      {date && <span className="text-xs opacity-60 mt-0.5">{date}</span>}
+    <div className={cn(
+      'flex flex-col rounded-md border-l-4 px-3 py-1.5 text-sm bg-card shadow-sm',
+      variants[variant],
+      className
+    )}>
+      <span className="font-semibold text-sm">{name}</span>
+      <span className="text-xs text-muted-foreground">{role}</span>
+      {date && <span className="text-xs text-muted-foreground">{date}</span>}
     </div>
   )
 }
@@ -49,22 +47,18 @@ interface DocumentHeaderProps {
 
 export function DocumentHeader({ approvers, className }: DocumentHeaderProps) {
   return (
-    <div
-      className={cn('rounded-lg border border-border bg-card p-4', className)}
-    >
-      <div className="flex flex-wrap items-stretch gap-2">
-        {approvers.map((approver, index) => (
-          <React.Fragment key={index}>
-            <ApprovalBadge {...approver} />
-            {index < approvers.length - 1 && (
-              <div className="hidden sm:flex items-center">
-                <div className="h-px w-6 bg-border" />
-                <div className="h-2 w-2 rotate-45 border-r border-t border-border" />
-              </div>
-            )}
-          </React.Fragment>
-        ))}
-      </div>
+    <div className={cn('flex flex-wrap items-stretch gap-3 mb-4', className)}>
+      {approvers.map((approver, index) => (
+        <React.Fragment key={index}>
+          <ApprovalBadge {...approver} />
+          {index < approvers.length - 1 && (
+            <div className="hidden sm:flex items-center">
+              <div className="h-0 w-4 border-t border-dashed border-muted-foreground/40" />
+              <div className="h-0 w-0 border-l-4 border-y-4 border-l-muted-foreground/40 border-y-transparent" />
+            </div>
+          )}
+        </React.Fragment>
+      ))}
     </div>
   )
 }

@@ -9,7 +9,7 @@ interface Attachment {
 }
 
 interface AttachmentsSectionProps {
-  attachments: Array<Attachment>
+  attachments: Attachment[]
   onAdd?: () => void
   onRemove?: (id: string) => void
   className?: string
@@ -19,20 +19,20 @@ export function AttachmentsSection({
   attachments,
   onAdd,
   onRemove,
-  className,
+  className
 }: AttachmentsSectionProps) {
   return (
-    <div className={cn('space-y-2', className)}>
+    <div className={cn('space-y-1', className)}>
       {attachments.map((attachment) => (
         <div
           key={attachment.id}
-          className="flex items-center justify-between gap-4 py-1.5 border-b border-border last:border-0"
+          className="flex items-center justify-between gap-4 py-1"
         >
           <div className="flex items-center gap-2 min-w-0">
-            <FileText className="h-4 w-4 text-info shrink-0" />
+            <FileText className="h-3.5 w-3.5 text-info shrink-0" />
             <a
               href={attachment.url || '#'}
-              className="text-sm text-info hover:underline truncate"
+              className="text-xs text-info hover:underline truncate"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -41,7 +41,7 @@ export function AttachmentsSection({
           </div>
           <button
             onClick={() => onRemove?.(attachment.id)}
-            className="text-sm text-destructive hover:underline shrink-0"
+            className="text-xs text-destructive hover:underline shrink-0"
           >
             Remove
           </button>
@@ -52,9 +52,9 @@ export function AttachmentsSection({
         variant="ghost"
         size="sm"
         onClick={onAdd}
-        className="gap-1 text-info hover:text-info/80 h-8 px-2"
+        className="gap-1 text-info hover:text-info/80 h-7 px-2 text-xs mt-2"
       >
-        <Plus className="h-4 w-4" />
+        <Plus className="h-3 w-3" />
         Add attachment
       </Button>
     </div>

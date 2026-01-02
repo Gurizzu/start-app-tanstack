@@ -1,7 +1,6 @@
 import * as React from 'react'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
 
 interface FormSectionProps {
   title: string
@@ -21,28 +20,30 @@ export function FormSection({
   const [isOpen, setIsOpen] = React.useState(defaultOpen)
 
   return (
-    <div
-      className={cn(
-        'rounded-lg border border-border overflow-hidden',
-        className,
-      )}
-    >
+    <div className={cn('overflow-hidden', className)}>
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex w-full items-center justify-between bg-primary px-4 py-2 text-left text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+        className="flex w-full items-center gap-2 bg-primary/95 px-3 py-1.5 text-left text-xs font-semibold text-primary-foreground hover:bg-primary transition-colors rounded-t-md"
       >
-        <span>{title}</span>
-        <div className="flex items-center gap-2">
-          {actions && <div onClick={(e) => e.stopPropagation()}>{actions}</div>}
-          {isOpen ? (
-            <ChevronUp className="h-4 w-4" />
-          ) : (
-            <ChevronDown className="h-4 w-4" />
+        <ChevronDown
+          className={cn(
+            "h-3.5 w-3.5 transition-transform",
+            !isOpen && "-rotate-90"
           )}
-        </div>
+        />
+        <span>{title}</span>
+        {actions && (
+          <div className="ml-auto" onClick={(e) => e.stopPropagation()}>
+            {actions}
+          </div>
+        )}
       </button>
-      {isOpen && <div className="bg-card p-4">{children}</div>}
+      {isOpen && (
+        <div className="border border-t-0 border-border bg-card p-4 rounded-b-md">
+          {children}
+        </div>
+      )}
     </div>
   )
 }
@@ -51,15 +52,27 @@ interface InfoRowProps {
   label: string
   value?: React.ReactNode
   className?: string
+  inline?: boolean
 }
 
-export function InfoRow({ label, value, className }: InfoRowProps) {
+export function InfoRow({ label, value, className, inline = false }: InfoRowProps) {
+  if (inline) {
+    return (
+      <div className={cn('flex items-baseline gap-2 text-sm py-0.5', className)}>
+        <span className="text-muted-foreground text-xs uppercase shrink-0 min-w-[100px]">
+          {label}
+        </span>
+        <span className="text-foreground">{value || '-'}</span>
+      </div>
+    )
+  }
+
   return (
-    <div className={cn('flex flex-col gap-1 text-sm', className)}>
-      <span className="text-muted-foreground text-xs uppercase tracking-wide">
+    <div className={cn('text-sm py-0.5', className)}>
+      <span className="text-muted-foreground text-xs uppercase block mb-0.5">
         {label}
       </span>
-      <span className="font-medium text-foreground">{value || '-'}</span>
+      <span className="text-foreground">{value || '-'}</span>
     </div>
   )
 }
@@ -80,8 +93,26 @@ export function InfoGrid({ children, columns = 4, className }: InfoGridProps) {
   }
 
   return (
-    <div className={cn('grid gap-4', gridCols[columns], className)}>
+    <div className={cn('grid gap-x-6 gap-y-2', gridCols[columns], className)}>
       {children}
+    </div>
+  )
+}
+
+interface InfoTableRowProps {
+  items: Array<{ label: string; value?: React.ReactNode }>
+  className?: string
+}
+
+export function InfoTableRow({ items, className }: InfoTableRowProps) {
+  return (
+    <div className={cn('grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-x-4 gap-y-1 py-1 border-b border-border/50 last:border-0', className)}>
+      {items.map((item, index) => (
+        <div key={index} className="text-sm">
+          <span className="text-muted-foreground text-[10px] uppercase tracking-wide">{item.label}</span>
+          <div className="text-foreground">{item.value || ''}</div>
+        </div>
+      ))}
     </div>
   )
 }
