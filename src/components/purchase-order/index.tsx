@@ -104,6 +104,21 @@ const samplePurchaseItems = [
     serviceOrder: '--',
     costCenter: 'TUG BOAT - ENTEBE MEGASTAR 67',
   },
+  {
+    id: '2',
+    itemNumber: 2,
+    description: 'HRU EP1EB NSR 2',
+    prQty: 1,
+    grQty: 0,
+    poQty: 1,
+    units: 'PC',
+    unitPrice: 1950000.0,
+    discount: 0,
+    total: 1950000.0,
+    currency: 'IDR',
+    serviceOrder: '--',
+    costCenter: 'TUG BOAT - ENTEBE MEGASTAR 67',
+  },
 ]
 
 const sampleValueSummary = {
@@ -198,11 +213,7 @@ export function PurchaseOrderPage() {
             </div>
 
             {/* Document Header */}
-            <FormSection
-              title="Document Header"
-              defaultOpen
-              className="dark:bg-slate-900/50"
-            >
+            <FormSection title="Document Header" defaultOpen>
               <DocumentHeader approvers={sampleApprovers} className="mb-8" />
               {/* ... (existing fields code) ... */}
               <div className="divide-y divide-border/40 text-sm">
@@ -326,11 +337,7 @@ export function PurchaseOrderPage() {
             </FormSection>
 
             {/* Purchase Requests */}
-            <FormSection
-              title="Purchase Requests"
-              defaultOpen
-              className="dark:bg-slate-900/50"
-            >
+            <FormSection title="Purchase Requests" defaultOpen>
               <div className="flex items-center gap-3">
                 <button className="flex items-center gap-1.5 px-3 py-1 bg-blue-50 border border-blue-200 text-blue-700 text-xs font-medium rounded-sm shadow-sm hover:bg-blue-100 dark:bg-blue-900/30 dark:border-blue-800 dark:text-blue-300">
                   PR01-2512-0386
@@ -344,11 +351,7 @@ export function PurchaseOrderPage() {
             </FormSection>
 
             {/* Vendor Bidding */}
-            <FormSection
-              title="Vendor Bidding"
-              defaultOpen
-              className="dark:bg-slate-900/50"
-            >
+            <FormSection title="Vendor Bidding" defaultOpen>
               <div className="flex items-center gap-3">
                 <button className="flex items-center gap-1.5 px-3 py-1 bg-blue-50 border border-blue-200 text-blue-700 text-xs font-medium rounded-sm shadow-sm hover:bg-blue-100 dark:bg-blue-900/30 dark:border-blue-800 dark:text-blue-300">
                   BD01-2512-0435
@@ -362,11 +365,7 @@ export function PurchaseOrderPage() {
             </FormSection>
 
             {/* Vendor Info */}
-            <FormSection
-              title="Vendor Info"
-              defaultOpen
-              className="dark:bg-slate-900/50"
-            >
+            <FormSection title="Vendor Info" defaultOpen>
               <div className="space-y-1">
                 <a
                   href="#"
@@ -389,11 +388,7 @@ export function PurchaseOrderPage() {
             </FormSection>
 
             {/* Bank Info */}
-            <FormSection
-              title="Bank Info"
-              defaultOpen
-              className="dark:bg-slate-900/50"
-            >
+            <FormSection title="Bank Info" defaultOpen>
               <div className="grid grid-cols-[100px_1fr] gap-4 items-center mb-1">
                 <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">
                   SOURCE BANK
@@ -447,7 +442,6 @@ export function PurchaseOrderPage() {
                   </div>
                 }
                 defaultOpen
-                className="dark:bg-slate-900/50"
                 contentClassName="p-0 overflow-hidden"
               >
                 <div className="p-4">
@@ -455,7 +449,7 @@ export function PurchaseOrderPage() {
                     <PurchaseItemsTable
                       items={samplePurchaseItems}
                       summary={sampleValueSummary}
-                      onAddItem={() => { }}
+                      onAddItem={() => {}}
                     />
                   </TabsContent>
                   <TabsContent value="account" className="mt-0">
@@ -468,35 +462,23 @@ export function PurchaseOrderPage() {
             </Tabs>
 
             {/* Attachments */}
-            <FormSection
-              title="Attachments"
-              defaultOpen
-              className="dark:bg-slate-900/50"
-            >
+            <FormSection title="Attachments" defaultOpen>
               <AttachmentsSection
                 attachments={sampleAttachments}
-                onAdd={() => { }}
-                onRemove={() => { }}
+                onAdd={() => {}}
+                onRemove={() => {}}
               />
             </FormSection>
 
             {/* Exception Notes & Additional Notes */}
             <div className="grid grid-cols-1 gap-6">
-              <FormSection
-                title="Exception Note"
-                defaultOpen
-                className="dark:bg-slate-900/50"
-              >
+              <FormSection title="Exception Note" defaultOpen>
                 <ExceptionNotes
                   notes={sampleExceptionNotes}
-                  onAddNote={() => { }}
+                  onAddNote={() => {}}
                 />
               </FormSection>
-              <FormSection
-                title="Additional Notes"
-                defaultOpen
-                className="dark:bg-slate-900/50"
-              >
+              <FormSection title="Additional Notes" defaultOpen>
                 <AdditionalNotes
                   value={`PT KARYA BERSAMA TEKNIK
 01/MR/E1567/DECK/XII/2025

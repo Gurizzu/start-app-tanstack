@@ -106,6 +106,12 @@ export function PurchaseItemsTable({
               <TableHead className="py-2 h-9 text-blue-900/80 font-bold tracking-tight dark:text-blue-200">
                 COST CENTER
               </TableHead>
+              <TableHead className="py-2 h-9 text-blue-900/80 font-bold tracking-tight dark:text-blue-200">
+                Note
+              </TableHead>
+              <TableHead className="py-2 h-9 text-blue-900/80 font-bold tracking-tight dark:text-blue-200">
+                Action
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -123,30 +129,20 @@ export function PurchaseItemsTable({
                 <TableCell className="font-bold text-xs py-2 uppercase">
                   {item.description}
                 </TableCell>
-                <TableCell className="text-right py-2 bg-yellow-50/30">
+                <TableCell className="text-right py-2">
                   {formatNumber(item.prQty)}
                 </TableCell>
-                <TableCell className="text-right py-2 bg-yellow-50/30">
-                  0.00
-                </TableCell>
+                <TableCell className="text-right py-2">0.00</TableCell>
                 <TableCell className="text-right py-1 px-2 border-x border-border/40">
-                  <div className="bg-background border border-border/60 rounded-sm px-2 py-1 text-right">
-                    {formatNumber(item.poQty)}
-                  </div>
+                  {formatNumber(item.poQty)}
                 </TableCell>
                 <TableCell className="py-2 pl-4 font-medium">
                   {item.units}
                 </TableCell>
                 <TableCell className="text-right py-2 px-2">
-                  <div className="bg-background border border-border/60 rounded-sm px-2 py-1 text-right">
-                    {formatNumber(item.unitPrice)}
-                  </div>
+                  {formatNumber(item.unitPrice)}
                 </TableCell>
-                <TableCell className="text-right py-2 px-2">
-                  <div className="bg-background border border-border/60 rounded-sm px-2 py-1 text-right flex items-center justify-end text-muted-foreground/60">
-                    0.00
-                  </div>
-                </TableCell>
+                <TableCell className="text-right py-2 px-2">0.00</TableCell>
                 <TableCell className="text-right font-medium py-2">
                   {formatNumber(item.total)}
                 </TableCell>

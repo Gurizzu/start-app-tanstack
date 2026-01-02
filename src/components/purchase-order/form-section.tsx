@@ -51,7 +51,7 @@ export function FormSection({
       {isOpen && (
         <div
           className={cn(
-            'bg-slate-100/50 border border-t-0 border-border p-4 rounded-b-sm rounded-tr-sm dark:bg-slate-900/40 dark:border-slate-800',
+            'bg-slate-100/50 border  border-border p-4 rounded-b-sm rounded-tr-sm dark:bg-slate-900/40 dark:border-slate-800',
             contentClassName,
           )}
         >
