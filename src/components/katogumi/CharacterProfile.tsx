@@ -52,7 +52,7 @@ export function CharacterProfile({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full sm:max-w-lg overflow-y-auto border-l-pink-200 dark:border-l-pink-900">
+      <SheetContent className="w-full sm:max-w-lg overflow-y-auto border-l-pink-200 dark:border-l-pink-900 p-6">
         {/* Pink accent bar at top */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-pink-400 to-rose-400" />
 
@@ -212,53 +212,61 @@ export function CharacterProfile({
         </div>
 
         {/* Artist Links */}
-        {image.artist && (
-          <div className="mt-6 space-y-2">
-            <h4 className="text-sm font-medium text-slate-500 dark:text-slate-400">
-              Artist
-            </h4>
-            <div className="space-y-2">
-              {image.artist.pixiv && (
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start gap-3 h-auto py-3 hover:bg-pink-50 dark:hover:bg-pink-900/20"
-                  onClick={() => window.open(image.artist?.pixiv!, '_blank')}
-                >
-                  <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center">
-                    <LinkIcon className="h-4 w-4 text-blue-500" />
-                  </div>
-                  <div className="text-left">
-                    <p className="text-sm font-medium text-slate-800 dark:text-white">
-                      Pixiv
-                    </p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
-                      View on Pixiv
-                    </p>
-                  </div>
-                </Button>
-              )}
-              {image.artist.twitter && (
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start gap-3 h-auto py-3 hover:bg-pink-50 dark:hover:bg-pink-900/20"
-                  onClick={() => window.open(image.artist?.twitter!, '_blank')}
-                >
-                  <div className="w-8 h-8 rounded-full bg-sky-100 dark:bg-sky-900/50 flex items-center justify-center">
-                    <Twitter className="h-4 w-4 text-sky-500" />
-                  </div>
-                  <div className="text-left">
-                    <p className="text-sm font-medium text-slate-800 dark:text-white">
-                      Twitter
-                    </p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
-                      @{image.artist.name}
-                    </p>
-                  </div>
-                </Button>
-              )}
+        {(() => {
+          const artist = image.artist
+          if (!artist) return null
+          return (
+            <div className="mt-6 space-y-2">
+              <h4 className="text-sm font-medium text-slate-500 dark:text-slate-400">
+                Artist
+              </h4>
+              <div className="space-y-2">
+                {artist.pixiv && (
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start gap-3 h-auto py-3 hover:bg-pink-50 dark:hover:bg-pink-900/20"
+                    onClick={() =>
+                      window.open(artist.pixiv ?? undefined, '_blank')
+                    }
+                  >
+                    <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center">
+                      <LinkIcon className="h-4 w-4 text-blue-500" />
+                    </div>
+                    <div className="text-left">
+                      <p className="text-sm font-medium text-slate-800 dark:text-white">
+                        Pixiv
+                      </p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">
+                        View on Pixiv
+                      </p>
+                    </div>
+                  </Button>
+                )}
+                {artist.twitter && (
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start gap-3 h-auto py-3 hover:bg-pink-50 dark:hover:bg-pink-900/20"
+                    onClick={() =>
+                      window.open(artist.twitter ?? undefined, '_blank')
+                    }
+                  >
+                    <div className="w-8 h-8 rounded-full bg-sky-100 dark:bg-sky-900/50 flex items-center justify-center">
+                      <Twitter className="h-4 w-4 text-sky-500" />
+                    </div>
+                    <div className="text-left">
+                      <p className="text-sm font-medium text-slate-800 dark:text-white">
+                        Twitter
+                      </p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">
+                        @{artist.name}
+                      </p>
+                    </div>
+                  </Button>
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          )
+        })()}
 
         {/* Dominant Color */}
         <div className="mt-6 flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50">

@@ -66,11 +66,10 @@ export function MasonryGallery({
 
       {/* Masonry Grid */}
       <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6 px-4">
-        {images.map((image, index) => (
+        {images.map((image) => (
           <ImageCard
             key={image.image_id}
             image={image}
-            index={index}
             onClick={() => onImageClick(image)}
           />
         ))}

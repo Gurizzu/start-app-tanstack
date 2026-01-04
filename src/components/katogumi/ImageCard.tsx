@@ -6,11 +6,10 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 interface ImageCardProps {
   image: WaifuImage
-  index: number
   onClick: () => void
 }
 
-export function ImageCard({ image, index, onClick }: ImageCardProps) {
+export function ImageCard({ image, onClick }: ImageCardProps) {
   const [isLoaded, setIsLoaded] = useState(false)
 
   // Generate a title from tags

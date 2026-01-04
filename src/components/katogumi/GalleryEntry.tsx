@@ -52,7 +52,7 @@ export function GalleryEntry({ onEnter }: GalleryEntryProps) {
         {/* Japanese Text */}
         <div className="mb-4">
           <span className="text-lg md:text-xl font-light tracking-[0.5em] text-pink-600/70 dark:text-pink-300/70">
-            カ ト グ ミ
+            加藤 恵
           </span>
         </div>
 
@@ -66,10 +66,10 @@ export function GalleryEntry({ onEnter }: GalleryEntryProps) {
 
         {/* Subtitle */}
         <p className="text-lg md:text-xl text-slate-600 dark:text-white/70 mb-2 font-light max-w-md mx-auto">
-          Anime Art Gallery
+          Megumi Kato
         </p>
         <p className="text-sm text-pink-500 dark:text-pink-400 mb-8">
-          A curated collection of beautiful artworks
+          The Unnoticeable Heroine
         </p>
 
         {/* Decorative Line */}

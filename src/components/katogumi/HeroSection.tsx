@@ -21,7 +21,7 @@ export function HeroSection({
   return (
     <section className="relative py-8 lg:py-12 overflow-hidden">
       {/* Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-pink-50/50 via-transparent to-transparent dark:from-pink-950/20 dark:via-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-b from-pink-50/50 via-transparent to-transparent dark:from-pink-950/20 dark:via-transparent pointer-events-none" />
 
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
@@ -36,7 +36,8 @@ export function HeroSection({
               <div className="relative bg-white dark:bg-slate-800 rounded-3xl shadow-2xl shadow-pink-200/50 dark:shadow-pink-900/20 p-3 transform hover:scale-[1.02] transition-transform duration-500">
                 {featuredImage ? (
                   <img
-                    src={featuredImage.url}
+                    // src={featuredImage.url}
+                    src="/images/084.webp"
                     alt="Featured artwork"
                     className="w-full h-auto rounded-2xl"
                     style={{ backgroundColor: featuredImage.dominant_color }}
@@ -126,18 +127,18 @@ export function HeroSection({
             <div className="flex flex-wrap gap-3 justify-center lg:justify-start mb-6">
               <Button
                 onClick={onCharacterProfile}
-                className="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white rounded-full px-6 gap-2"
+                className="group bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white rounded-full px-6 gap-2 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-pink-500/30 active:scale-95"
               >
                 Character Profile
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
               </Button>
               <Button
                 variant="outline"
                 onClick={onAbout}
-                className="rounded-full px-6 gap-2 border-slate-300 dark:border-slate-600"
+                className="group rounded-full px-6 gap-2 border-slate-300 dark:border-slate-600 transition-all duration-300 hover:scale-105 hover:border-pink-400 dark:hover:border-pink-500 hover:bg-pink-50 dark:hover:bg-pink-900/20 active:scale-95"
               >
                 About Her
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
               </Button>
             </div>
 

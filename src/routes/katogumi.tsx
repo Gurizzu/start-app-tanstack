@@ -3,13 +3,15 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { ArrowLeft, Eye, Heart } from 'lucide-react'
-import type { WaifuImage } from '@/hooks/useWaifuImages';
+import type { WaifuImage } from '@/hooks/useWaifuImages'
 import { useWaifuImages } from '@/hooks/useWaifuImages'
 import { GalleryEntry } from '@/components/katogumi/GalleryEntry'
 import { HeroSection } from '@/components/katogumi/HeroSection'
 import { FilterBar } from '@/components/katogumi/FilterBar'
 import { MasonryGallery } from '@/components/katogumi/MasonryGallery'
 import { CharacterProfile } from '@/components/katogumi/CharacterProfile'
+import { CharacterProfileSheet } from '@/components/katogumi/CharacterProfileSheet'
+import { AboutSheet } from '@/components/katogumi/AboutSheet'
 import { GalleryFooter } from '@/components/katogumi/GalleryFooter'
 import { MusicPlayer } from '@/components/katogumi/MusicPlayer'
 import { ThemeToggle } from '@/components/katogumi/ThemeToggle'
@@ -23,7 +25,9 @@ function KatogumiPage() {
   const [entered, setEntered] = useState(false)
   const [activeTags, setActiveTags] = useState<Array<string>>(['waifu'])
   const [selectedImage, setSelectedImage] = useState<WaifuImage | null>(null)
-  const [profileOpen, setProfileOpen] = useState(false)
+  const [imageProfileOpen, setImageProfileOpen] = useState(false)
+  const [characterProfileOpen, setCharacterProfileOpen] = useState(false)
+  const [aboutOpen, setAboutOpen] = useState(false)
   const [viewedCount, setViewedCount] = useState(1)
 
   const { images, loading, hasMore, loadMore, refetch } = useWaifuImages([
@@ -48,22 +52,16 @@ function KatogumiPage() {
 
   const handleImageClick = (image: WaifuImage) => {
     setSelectedImage(image)
-    setProfileOpen(true)
+    setImageProfileOpen(true)
     setViewedCount((prev) => prev + 1)
   }
 
   const handleCharacterProfile = () => {
-    if (images.length > 0) {
-      setSelectedImage(images[0])
-      setProfileOpen(true)
-    }
+    setCharacterProfileOpen(true)
   }
 
   const handleAbout = () => {
-    if (images.length > 0) {
-      setSelectedImage(images[0])
-      setProfileOpen(true)
-    }
+    setAboutOpen(true)
   }
 
   // Entry Screen
@@ -160,12 +158,21 @@ function KatogumiPage() {
       {/* Footer */}
       <GalleryFooter />
 
-      {/* Character Profile Sheet */}
+      {/* Image Profile Sheet (when clicking an image) */}
       <CharacterProfile
         image={selectedImage}
-        open={profileOpen}
-        onOpenChange={setProfileOpen}
+        open={imageProfileOpen}
+        onOpenChange={setImageProfileOpen}
       />
+
+      {/* Character Profile Sheet */}
+      <CharacterProfileSheet
+        open={characterProfileOpen}
+        onOpenChange={setCharacterProfileOpen}
+      />
+
+      {/* About Sheet */}
+      <AboutSheet open={aboutOpen} onOpenChange={setAboutOpen} />
 
       {/* Music Player */}
       <MusicPlayer />
