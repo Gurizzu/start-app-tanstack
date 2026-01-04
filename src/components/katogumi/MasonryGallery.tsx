@@ -8,6 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 interface MasonryGalleryProps {
   images: Array<WaifuImage>
   loading: boolean
+  loadingMore: boolean
   hasMore: boolean
   onLoadMore: () => void
   onImageClick: (image: WaifuImage) => void
@@ -16,6 +17,7 @@ interface MasonryGalleryProps {
 export function MasonryGallery({
   images,
   loading,
+  loadingMore,
   hasMore,
   onLoadMore,
   onImageClick,
@@ -55,6 +57,11 @@ export function MasonryGallery({
     )
   }
 
+  const handleLoadMore = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    onLoadMore()
+  }
+
   return (
     <div className="w-full">
       {/* Section Divider with Sparkle */}
@@ -77,21 +84,26 @@ export function MasonryGallery({
 
       {/* Load More Section */}
       <div className="flex flex-col items-center py-12">
-        {loading && images.length > 0 && (
-          <div className="flex items-center gap-3 text-slate-500 dark:text-slate-400 mb-4">
-            <Loader2 className="h-5 w-5 animate-spin text-pink-500" />
-            <span className="text-sm">Loading more images...</span>
-          </div>
-        )}
-
         {hasMore ? (
           <button
-            onClick={onLoadMore}
-            disabled={loading}
-            className="group flex items-center justify-center gap-2 px-8 py-3 rounded-full border border-pink-200 dark:border-pink-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm text-pink-500 dark:text-pink-400 hover:bg-pink-50 dark:hover:bg-pink-900/30 transition-all duration-300 disabled:opacity-50"
+            type="button"
+            onClick={handleLoadMore}
+            disabled={loadingMore}
+            className="group flex items-center justify-center gap-2 px-8 py-3 rounded-full border border-pink-200 dark:border-pink-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm text-pink-500 dark:text-pink-400 hover:bg-pink-50 dark:hover:bg-pink-900/30 transition-all duration-300 disabled:opacity-50 min-w-[200px]"
           >
-            <span className="text-sm font-medium">Load More Artworks</span>
-            <span className="text-pink-400 group-hover:animate-pulse">✦</span>
+            {loadingMore ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span className="text-sm font-medium">Loading...</span>
+              </>
+            ) : (
+              <>
+                <span className="text-sm font-medium">Load More Artworks</span>
+                <span className="text-pink-400 group-hover:animate-pulse">
+                  ✦
+                </span>
+              </>
+            )}
           </button>
         ) : (
           <div className="text-center">

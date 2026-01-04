@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useInfiniteQuery } from '@tanstack/react-query'
 
 export interface WaifuImage {
   signature: string
@@ -31,87 +31,110 @@ export interface WaifuImage {
   }>
 }
 
+interface WaifuApiResponse {
+  images: Array<WaifuImage>
+}
+
+interface PageResult {
+  images: Array<WaifuImage>
+  page: number
+  hasMore: boolean
+}
+
 interface UseWaifuImagesResult {
   images: Array<WaifuImage>
   loading: boolean
-  error: string | null
-  loadMore: () => Promise<void>
-  refetch: (tags: Array<string>) => Promise<void>
+  error: Error | null
+  loadMore: () => void
+  refetch: () => void
   hasMore: boolean
+  isFetchingNextPage: boolean
 }
 
 const IMAGES_PER_PAGE = 30
 
+async function fetchWaifuImages(
+  tags: Array<string>,
+  page: number,
+): Promise<PageResult> {
+  const tagsParam = tags.length > 0 ? tags.join(',') : 'waifu'
+  const url = `https://api.waifu.im/search?included_tags=${tagsParam}&many=true&limit=${IMAGES_PER_PAGE}`
+
+  const response = await fetch(url, {
+    headers: {
+      Accept: 'application/json',
+    },
+  })
+
+  if (!response.ok) {
+    throw new Error(`API Error: ${response.status}`)
+  }
+
+  const data: WaifuApiResponse = await response.json()
+
+  return {
+    images: data.images,
+    page,
+    hasMore: data.images.length >= IMAGES_PER_PAGE,
+  }
+}
+
 export function useWaifuImages(
   initialTags: Array<string> = ['waifu'],
 ): UseWaifuImagesResult {
-  const [images, setImages] = useState<Array<WaifuImage>>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [currentTags, setCurrentTags] = useState<Array<string>>(initialTags)
-  const [hasMore, setHasMore] = useState(true)
-
-  const fetchImages = useCallback(
-    async (tags: Array<string>, append: boolean = false) => {
-      if (loading) return
-
-      setLoading(true)
-      setError(null)
-
-      try {
-        const tagsParam = tags.length > 0 ? tags.join(',') : 'waifu'
-        const url = `https://api.waifu.im/search?included_tags=${tagsParam}&many=true&limit=${IMAGES_PER_PAGE}`
-
-        const response = await fetch(url)
-        if (!response.ok) {
-          throw new Error(`API Error: ${response.status}`)
-        }
-
-        const data = await response.json()
-        const newImages = data.images || []
-
-        if (append) {
-          setImages((prev) => {
-            // Filter out duplicates
-            const existingIds = new Set(prev.map((img) => img.image_id))
-            const uniqueNew = newImages.filter(
-              (img: WaifuImage) => !existingIds.has(img.image_id),
-            )
-            return [...prev, ...uniqueNew]
-          })
-        } else {
-          setImages(newImages)
-        }
-
-        setHasMore(newImages.length >= IMAGES_PER_PAGE)
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch images')
-      } finally {
-        setLoading(false)
+  const {
+    data,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    refetch,
+  } = useInfiniteQuery<PageResult, Error>({
+    queryKey: ['waifuImages', initialTags],
+    queryFn: async ({ pageParam }) => {
+      return fetchWaifuImages(initialTags, pageParam as number)
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage: PageResult) => {
+      if (lastPage.hasMore) {
+        return lastPage.page + 1
       }
+      return undefined
     },
-    [loading],
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    gcTime: 1000 * 60 * 30, // 30 minutes
+  })
+
+  // Flatten all pages into a single array and deduplicate by image_id
+  const allImages = data?.pages.flatMap((page: PageResult) => page.images) ?? []
+  const uniqueImages = allImages.reduce<Array<WaifuImage>>(
+    (acc: Array<WaifuImage>, image: WaifuImage) => {
+      if (!acc.find((i: WaifuImage) => i.image_id === image.image_id)) {
+        acc.push(image)
+      }
+      return acc
+    },
+    [],
   )
 
-  const refetch = useCallback(
-    async (tags: Array<string>) => {
-      setCurrentTags(tags)
-      setImages([])
-      await fetchImages(tags, false)
-    },
-    [fetchImages],
-  )
+  const handleLoadMore = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage()
+    }
+  }
 
-  const loadMore = useCallback(async () => {
-    await fetchImages(currentTags, true)
-  }, [fetchImages, currentTags])
+  const handleRefetch = () => {
+    refetch()
+  }
 
   return {
-    images,
-    loading,
-    error,
-    loadMore,
-    refetch,
-    hasMore,
+    images: uniqueImages,
+    loading: isFetching && !isFetchingNextPage,
+    error: error ?? null,
+    loadMore: handleLoadMore,
+    refetch: handleRefetch,
+    hasMore: hasNextPage,
+    isFetchingNextPage,
   }
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import { createFileRoute } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ArrowLeft, Eye, Heart } from 'lucide-react'
 import type { WaifuImage } from '@/hooks/useWaifuImages'
 import { useWaifuImages } from '@/hooks/useWaifuImages'
@@ -30,16 +30,9 @@ function KatogumiPage() {
   const [aboutOpen, setAboutOpen] = useState(false)
   const [viewedCount, setViewedCount] = useState(1)
 
-  const { images, loading, hasMore, loadMore, refetch } = useWaifuImages([
-    'waifu',
-  ])
-
-  // Initial fetch
-  useEffect(() => {
-    if (entered && images.length === 0) {
-      refetch(activeTags)
-    }
-  }, [entered])
+  // TanStack Query automatically refetches when activeTags changes (part of queryKey)
+  const { images, loading, hasMore, loadMore, isFetchingNextPage } =
+    useWaifuImages(activeTags)
 
   const handleEnter = () => {
     setEntered(true)
@@ -47,7 +40,7 @@ function KatogumiPage() {
 
   const handleTagsChange = (tags: Array<string>) => {
     setActiveTags(tags)
-    refetch(tags)
+    // No need to call refetch - TanStack Query automatically refetches when queryKey changes
   }
 
   const handleImageClick = (image: WaifuImage) => {
@@ -149,6 +142,7 @@ function KatogumiPage() {
         <MasonryGallery
           images={images}
           loading={loading}
+          loadingMore={isFetchingNextPage}
           hasMore={hasMore}
           onLoadMore={loadMore}
           onImageClick={handleImageClick}
